@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resumidor de Texto</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      width: 80%;
+      max-width: 600px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    h1 {
+      color: #333;
+      text-align: center;
+    }
+
+    form {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+
+    textarea, input {
+      width: 100%;
+      margin-bottom: 15px;
+      padding: 10px;
+      box-sizing: border-box;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+
+    button {
+      background-color: #3498db;
+      color: white;
+      padding: 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      width: 100%;
+      display: inline-block;
+    }
+
+    button:hover {
+      background-color: #2980b9;
+    }
+
+    #summaryResult {
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    }
+
+    #summaryResult p {
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Resumidor de Texto</h1>
+    <form id="summaryForm">
+      <label for="originalText">Texto Original:</label>
+      <textarea id="originalText" name="originalText" rows="4" cols="50" required></textarea>
+      <br>
+      <label for="userName">Tu Nombre:</label>
+      <input type="text" id="userName" name="userName" required>
+      <br>
+      <button type="submit">Crear Resumen</button>
+    </form>
+    <div id="summaryResult"></div>
+  </div>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script>
+    document.getElementById('summaryForm').addEventListener('submit', function (event) {
+      event.preventDefault();
+      const originalText = document.getElementById('originalText').value;
+      const userName = document.getElementById('userName').value;
+
+      axios.post('/api/create-summary', { originalText, userName })
+        .then(response => {
+          document.getElementById('summaryResult').innerHTML = `<p><strong>Texto Resumido:</strong> ${response.data.summarizedText}</p>`;
+        })
+        .catch(error => console.error('Error creating summary:', error));
+    });
+  </script>
+</body>
+</html>
